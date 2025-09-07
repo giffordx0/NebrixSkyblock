@@ -1,0 +1,177 @@
+world:
+  overworld: nebrix_islands
+  nether: nebrix_islands_nether
+  end: nebrix_islands_end
+  base-y: 64
+  pvp: false
+  mob-spawning: false
+  endPortalPick: true
+
+islands:
+  spacing: 256
+  radius: 64
+  max-members: 5
+  # block values for island "value"
+  block-values:
+    DIAMOND_BLOCK: 500
+    EMERALD_BLOCK: 750
+    NETHERITE_BLOCK: 5000
+    GOLD_BLOCK: 150
+    IRON_BLOCK: 75
+    LAPIS_BLOCK: 60
+    COPPER_BLOCK: 25
+  # per-block limits (per island)
+  block-limits:
+    HOPPER: 64
+    CREEPER_SPAWNER: 6
+
+generators:
+  cobblestone:
+    # tier → weighted table
+    T1:
+      COBBLESTONE: 80
+      COAL_ORE: 10
+      IRON_ORE: 5
+      DIAMOND_ORE: 3
+      EMERALD_ORE: 2
+    T2:
+      COBBLESTONE: 60
+      COAL_ORE: 10
+      IRON_ORE: 10
+      GOLD_ORE: 8
+      DIAMOND_ORE: 7
+      EMERALD_ORE: 5
+  basalt:
+    T1:
+      BASALT: 80
+      BLACKSTONE: 15
+      ANCIENT_DEBRIS: 1
+      NETHER_QUARTZ_ORE: 4
+    T2:
+      BASALT: 60
+      BLACKSTONE: 25
+      ANCIENT_DEBRIS: 2
+      NETHER_QUARTZ_ORE: 13
+
+upgrades:
+  # cost in crystals and coins per level
+  radius:
+    start: 64
+    step: 8
+    max: 160
+    cost-per-step:
+      crystals: 50
+      coins: 25000
+  generator:
+    # upgrades cobble & basalt tier together
+    tier-start: T1
+    tiers: [T1, T2]
+    cost-per-tier:
+      T2:
+        crystals: 150
+        coins: 100000
+
+boosters:
+  # island-wide timed buffs
+  # id → {multiplier, seconds, cost}
+  mining:
+    multiplier: 1.25
+    seconds: 1800
+    cost:
+      crystals: 75
+      coins: 50000
+  farming:
+    multiplier: 1.25
+    seconds: 1800
+    cost:
+      crystals: 50
+      coins: 30000
+
+missions:
+  # simple example missions (earn xp + crystals)
+  woodcutter:
+    objective: BREAK
+    material: OAK_LOG
+    amount: 128
+    reward:
+      xp: 250
+      crystals: 25
+  miner:
+    objective: MINE
+    material: COBBLESTONE
+    amount: 1000
+    reward:
+      xp: 400
+      crystals: 40
+
+levels:
+  # xp thresholds → level
+  thresholds: [0, 250, 750, 1500, 3000, 6000, 12000]
+  # gates (unlock dimensions/features at level)
+  unlocks:
+    nether-level: 3
+    end-level: 6
+
+minions:
+  # item used to spawn a Miner minion (admin GUI gives this)
+  item:
+    material: ZOMBIE_SPAWN_EGG
+    name: "&dNebrix Minion &7(Miner)"
+    lore:
+      - "&7Place on your island to spawn a Miner."
+      - "&7Right-click the minion to manage it."
+
+  fuels:
+    # material -> {seconds, efficiency}
+    COAL:
+      seconds: 600        # 10 min
+      efficiency: 1.00    # 1.0x base rate
+    COAL_BLOCK:
+      seconds: 6000       # 100 min
+      efficiency: 1.10
+    BLAZE_ROD:
+      seconds: 3600       # 60 min
+      efficiency: 1.15
+    LAVA_BUCKET:
+      seconds: 7200       # 120 min
+      efficiency: 1.25
+
+  types:
+    miner:
+      base-interval-ticks: 200     # 10s base at level 1
+      interval-per-level-mult: 0.92  # each level ~8% faster
+      max-level: 10
+      upgrade-cost:
+        # per level step
+        crystals: 25
+        coins: 15000
+      # output table per island generator tier (ties into your upgrades.generator.tiers)
+      table-per-tier:
+        T1:
+          COBBLESTONE: 80
+          COAL_ORE: 10
+          IRON_ORE: 5
+          DIAMOND_ORE: 3
+          EMERALD_ORE: 2
+        T2:
+          COBBLESTONE: 60
+          COAL_ORE: 10
+          IRON_ORE: 10
+          GOLD_ORE: 8
+          DIAMOND_ORE: 7
+          EMERALD_ORE: 5
+
+
+gui:
+  title-main: "§8Nebrix • Skyblock"
+  title-manage: "§8Nebrix • Manage Island"
+  title-members: "§8Nebrix • Members & Invites"
+  title-bank: "§8Nebrix • Bank"
+  title-perms: "§8Nebrix • Permissions"
+  title-upgrades: "§8Nebrix • Upgrades"
+  title-boosters: "§8Nebrix • Boosters"
+  title-missions: "§8Nebrix • Missions"
+  title-generators: "§8Nebrix • Generators"
+  title-top: "§8Nebrix • Top Islands"
+  title-select-player: "§8Nebrix • Select Player"
+  back-name: "&7« Back"
