@@ -1,41 +1,36 @@
 package com.chunksmith.nebrixSkyblock.ui;
 
-import org.bukkit.Bukkit;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-/** Base class for simple Chest-GUI menus. */
+/** Simple menu framework. */
 public abstract class Menu {
-    protected final String title;
-    protected final int size; // multiple of 9
-    protected Inventory inv;
+  private static final Map<Player, Menu> OPEN = new HashMap<>();
 
-    protected Menu(String title, int size) {
-        this.title = title;
-        this.size = size;
+  protected abstract Inventory draw(Player viewer);
+
+  protected void click(Player player, InventoryClickEvent event) {}
+
+  public void open(Player player) {
+    Inventory inv = draw(player);
+    OPEN.put(player, this);
+    player.openInventory(inv);
+  }
+
+  public static class MenuListener implements Listener {
+    @EventHandler
+    public void onClick(InventoryClickEvent event) {
+      if (!(event.getWhoClicked() instanceof Player p)) return;
+      Menu menu = OPEN.get(p);
+      if (menu != null) {
+        menu.click(p, event);
+        event.setCancelled(true);
+      }
     }
-
-    public void open(Player p) {
-        inv = Bukkit.createInventory(p, size, title);
-        draw(p);
-        p.openInventory(inv);
-        MenuListener.track(p.getUniqueId(), this);
-    }
-
-    public void set(int slot, ItemStack stack) {
-        if (inv != null && slot >= 0 && slot < inv.getSize()) inv.setItem(slot, stack);
-    }
-
-    /** Fill inventory before opening (or when redrawing). */
-    public abstract void draw(Player viewer);
-
-    /** Handle clicks (override in subclasses). */
-    public void onClick(Player p, int slot, ItemStack clicked, ClickType type) {}
-
-    /** Handle close (override in subclasses). */
-    public void onClose(Player p) {}
-
-    public String title() { return title; }
+  }
 }
