@@ -1,6 +1,6 @@
 name: NebrixSkyblock
 version: '${version}'
-main: com.chunksmith.nebrixSkyblock.NebrixSkyblock
+main: com.chunksmith.nebrixskyblock.NebrixSkyblock
 api-version: '1.21'
 load: POSTWORLD
 authors: [ Chunksmith ]
