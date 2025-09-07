@@ -1,36 +1,48 @@
 package com.chunksmith.nebrixSkyblock.island;
 
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.Location;
-import org.bukkit.World;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
-/** Outward square-spiral allocator for island centers. */
-public class IslandGrid {
-    private int x = 0, z = 0;
-    private int dx = 0, dz = -1;
-    private int steps = 0, legLen = 1, legProg = 0;
+/** Spiral allocator for island centers. */
+public final class IslandGrid {
+  private int x;
+  private int z;
+  private int leg = 0;
+  private int steps = 1;
+  private int stepCount = 0;
 
-    private final World world;
-    private final int spacing;
-    private final int baseY;
+  /** Returns next grid point in a clockwise spiral. */
+  public Point next() {
+    Point p = new Point(x, z);
+    move();
+    return p;
+  }
 
-    public IslandGrid(World world, int spacing, int baseY) {
-        this.world = world;
-        this.spacing = spacing;
-        this.baseY = baseY;
+  private void move() {
+    switch (leg) {
+      case 0 -> x++; // east
+      case 1 -> z++; // north
+      case 2 -> x--; // west
+      case 3 -> z--; // south
     }
-
-    public Location next() {
-        x += dx; z += dz; legProg++;
-        if (legProg == legLen) {
-            legProg = 0;
-            if (dx == 0 && dz == -1) { dx = 1; dz = 0; }
-            else if (dx == 1 && dz == 0) { dx = 0; dz = 1; }
-            else if (dx == 0 && dz == 1) { dx = -1; dz = 0; }
-            else if (dx == -1 && dz == 0) { dx = 0; dz = -1; }
-            steps++; if (steps % 2 == 0) legLen++;
-        }
-        return new Location(world, x * spacing + 0.5, baseY, z * spacing + 0.5);
+    stepCount++;
+    if (stepCount == steps) {
+      stepCount = 0;
+      leg = (leg + 1) % 4;
+      if (leg == 0 || leg == 2) {
+        steps++;
+      }
     }
+  }
+
+  /** Utility to generate first n points from origin. */
+  public static List<Point> first(int n) {
+    IslandGrid grid = new IslandGrid();
+    List<Point> pts = new ArrayList<>();
+    for (int i = 0; i < n; i++) {
+      pts.add(grid.next());
+    }
+    return pts;
+  }
 }
