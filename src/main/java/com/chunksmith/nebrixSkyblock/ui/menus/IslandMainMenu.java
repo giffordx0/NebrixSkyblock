@@ -13,6 +13,9 @@ import org.bukkit.inventory.Inventory;
 
 public class IslandMainMenu extends Menu {
   private final NebrixSkyblock plugin;
+
+  public IslandMainMenu(NebrixSkyblock plugin) {
+    this.plugin = plugin;
   private final UUID viewerId;
 
   public IslandMainMenu(NebrixSkyblock plugin, UUID viewerId) {

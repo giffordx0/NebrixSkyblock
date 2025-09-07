@@ -22,7 +22,7 @@ public final class IslandCommand implements CommandExecutor {
       sender.sendMessage(Component.text("Players only."));
       return true;
     }
-    new IslandMainMenu(plugin, player.getUniqueId()).open(player);
+    new IslandMainMenu(plugin).open(player);
     return true;
   }
 }
