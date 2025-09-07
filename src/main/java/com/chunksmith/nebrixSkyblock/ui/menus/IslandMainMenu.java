@@ -5,6 +5,7 @@ import com.chunksmith.nebrixSkyblock.ui.ItemBuilder;
 import com.chunksmith.nebrixSkyblock.ui.Menu;
 import com.chunksmith.nebrixSkyblock.util.Text;
 import java.util.List;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,6 +16,11 @@ public class IslandMainMenu extends Menu {
 
   public IslandMainMenu(NebrixSkyblock plugin) {
     this.plugin = plugin;
+  private final UUID viewerId;
+
+  public IslandMainMenu(NebrixSkyblock plugin, UUID viewerId) {
+    this.plugin = plugin;
+    this.viewerId = viewerId;
   }
 
   @Override

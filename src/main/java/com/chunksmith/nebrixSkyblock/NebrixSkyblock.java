@@ -9,7 +9,6 @@ import com.chunksmith.nebrixSkyblock.storage.StorageService;
 import com.chunksmith.nebrixSkyblock.ui.Menu;
 import com.chunksmith.nebrixSkyblock.value.ValueService;
 import com.chunksmith.nebrixSkyblock.world.WorldService;
-import com.chunksmith.nebrixSkyblock.protect.ProtectionListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /** Main plugin entry. */
@@ -35,7 +34,6 @@ public class NebrixSkyblock extends JavaPlugin implements com.chunksmith.nebrixS
 
     getCommand("island").setExecutor(new IslandCommand(this));
     getServer().getPluginManager().registerEvents(new Menu.MenuListener(), this);
-    getServer().getPluginManager().registerEvents(new ProtectionListener(), this);
   }
 
   public WorldService worlds() {

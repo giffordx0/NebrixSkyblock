@@ -29,7 +29,7 @@ public class Island {
   public Location center() {
     return center;
   }
-
+  
   public UUID owner() {
     return owner;
   }
