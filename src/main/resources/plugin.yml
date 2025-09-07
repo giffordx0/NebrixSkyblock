@@ -6,11 +6,32 @@ load: POSTWORLD
 authors: [ Chunksmith ]
 description: Official NebrixMC Skyblock engine — powering islands, economy, and the living sky.
 website: https://chunksmith.com
+
 commands:
   island:
-    aliases: [is, skyblock]
-    description: Opens the Skyblock GUI
-    usage: /<command>
+    description: Main island command
+    usage: /island [subcommand]
+    aliases: [is, skyblock, sb]
+
 permissions:
-  nebrix.admin:
+  nebrixskyblock.admin:
+    description: Admin access to all plugin features
     default: op
+  nebrixskyblock.island.create:
+    description: Allow creating islands
+    default: true
+  nebrixskyblock.island.delete:
+    description: Allow deleting islands
+    default: true
+  nebrixskyblock.island.invite:
+    description: Allow inviting players to islands
+    default: true
+  nebrixskyblock.island.kick:
+    description: Allow kicking players from islands
+    default: true
+  nebrixskyblock.bypass.protection:
+    description: Bypass island protection
+    default: op
+
+depend: []
+softdepend: [Vault, PlaceholderAPI]

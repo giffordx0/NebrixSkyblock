@@ -1,88 +1,89 @@
 package com.chunksmith.nebrixSkyblock;
 
-import com.chunksmith.nebrixSkyblock.commands.IslandCommand;
-import com.chunksmith.nebrixSkyblock.gen.GeneratorListener;
-import com.chunksmith.nebrixSkyblock.island.IslandManager;
-import com.chunksmith.nebrixSkyblock.leaderboard.LeaderboardManager;
-import com.chunksmith.nebrixSkyblock.minion.MinionListener;
-import com.chunksmith.nebrixSkyblock.minion.MinionManager;
-import com.chunksmith.nebrixSkyblock.protection.ProtectionListener;
-import com.chunksmith.nebrixSkyblock.ui.MenuListener;
-import com.chunksmith.nebrixSkyblock.world.VoidWorldGenerator;
-import org.bukkit.*;
+import com.chunksmith.nebrixSkyblock.command.IslandCommand;
+import com.chunksmith.nebrixSkyblock.generator.BasaltGenListener;
+import com.chunksmith.nebrixSkyblock.generator.CobbleGenListener;
+import com.chunksmith.nebrixSkyblock.generator.GeneratorService;
+import com.chunksmith.nebrixSkyblock.invites.InviteService;
+import com.chunksmith.nebrixSkyblock.island.IslandService;
+import com.chunksmith.nebrixSkyblock.limits.BlockLimitsService;
+import com.chunksmith.nebrixSkyblock.protect.ProtectionListener;
+import com.chunksmith.nebrixSkyblock.storage.StorageService;
+import com.chunksmith.nebrixSkyblock.ui.Menu;
+import com.chunksmith.nebrixSkyblock.value.ValueService;
+import com.chunksmith.nebrixSkyblock.world.WorldService;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class NebrixSkyblock extends JavaPlugin {
-
-    private IslandManager islandManager;
-    private LeaderboardManager leaderboard;
-
-    // ADD THIS:
-    private MinionManager minionManager;
-
-    public String overworld() { return getConfig().getString("world.overworld", "nebrix_islands"); }
-    public String nether()     { return getConfig().getString("world.nether", "nebrix_islands_nether"); }
-    public String end()        { return getConfig().getString("world.end", "nebrix_islands_end"); }
-
-    // ADD THIS:
-    public MinionManager minions() { return minionManager; }
+/** Main plugin entry. */
+public class NebrixSkyblock extends JavaPlugin implements com.chunksmith.nebrixSkyblock.api.NebrixSkyblockAPI {
+    private WorldService worlds;
+    private IslandService islands;
+    private BlockLimitsService limits;
+    private ValueService values;
+    private GeneratorService generators;
+    private InviteService invites;
+    private StorageService storage;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        ensureWorld(overworld(), World.Environment.NORMAL);
-        ensureWorld(nether(), World.Environment.NETHER);
-        ensureWorld(end(), World.Environment.THE_END);
 
-        this.islandManager = new IslandManager(this);
-        this.leaderboard   = new LeaderboardManager(this);
+        // Initialize services in proper order
+        this.worlds = new WorldService(this);
+        this.storage = new StorageService(this);
+        this.islands = new IslandService(this);
+        this.limits = new BlockLimitsService(this);
+        this.values = new ValueService(this);
+        this.generators = new GeneratorService(this);
+        this.invites = new InviteService();
 
-        // ADD THIS:
-        this.minionManager = new MinionManager(this);
+        // Register commands
+        getCommand("island").setExecutor(new IslandCommand(this));
 
-        getServer().getPluginManager().registerEvents(new MenuListener(), this);
-        getServer().getPluginManager().registerEvents(new ProtectionListener(this), this);
-        getServer().getPluginManager().registerEvents(new GeneratorListener(this), this);
+        // Register event listeners
+        var pm = getServer().getPluginManager();
+        pm.registerEvents(new Menu.MenuListener(), this);
+        pm.registerEvents(new CobbleGenListener(this), this);
+        pm.registerEvents(new BasaltGenListener(this), this);
+        pm.registerEvents(new ProtectionListener(this), this);
 
-        // ADD THIS:
-        getServer().getPluginManager().registerEvents(new MinionListener(this), this);
-
-        IslandCommand islandCommand = new IslandCommand(this);
-        getCommand("island").setExecutor(islandCommand);
-        getCommand("island").setTabCompleter(islandCommand);
+        getLogger().info("NebrixSkyblock enabled successfully!");
     }
 
     @Override
     public void onDisable() {
-        if (islandManager != null) islandManager.shutdown();
-        if (leaderboard != null) leaderboard.shutdown();
-
-        // ADD THIS:
-        if (minionManager != null) minionManager.shutdown();
+        if (storage != null) {
+            storage.flush();
+        }
+        getLogger().info("NebrixSkyblock disabled!");
     }
 
-    private void ensureWorld(String name, World.Environment env) {
-        int baseY = getConfig().getInt("world.base-y", 64);
-        boolean pvp = getConfig().getBoolean("world.pvp", false);
-        boolean mobs = getConfig().getBoolean("world.mob-spawning", false);
-
-        World w = Bukkit.getWorld(name);
-        if (w == null) {
-            WorldCreator wc = new WorldCreator(name);
-            wc.environment(env);
-            wc.type(WorldType.NORMAL);
-            wc.generateStructures(false);
-            if (env == World.Environment.NORMAL) wc.generator(new VoidWorldGenerator());
-            w = Bukkit.createWorld(wc);
-        }
-        if (w != null && env == World.Environment.NORMAL) {
-            w.setPVP(pvp);
-            w.setSpawnFlags(mobs, mobs);
-            w.setGameRule(GameRule.DO_MOB_SPAWNING, mobs);
-            w.setSpawnLocation(0, baseY, 0);
-        }
+    public WorldService worlds() {
+        return worlds;
     }
 
-    public IslandManager islands() { return islandManager; }
-    public LeaderboardManager leaderboard() { return leaderboard; }
+    @Override
+    public IslandService islands() {
+        return islands;
+    }
+
+    public BlockLimitsService limits() {
+        return limits;
+    }
+
+    public ValueService values() {
+        return values;
+    }
+
+    public GeneratorService generators() {
+        return generators;
+    }
+
+    public StorageService storage() {
+        return storage;
+    }
+
+    public InviteService invites() {
+        return invites;
+    }
 }
