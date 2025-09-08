@@ -40,6 +40,7 @@ public class NebrixSkyblock extends JavaPlugin implements com.chunksmith.nebrixS
     return worlds;
   }
 
+
 @Override
   public IslandService islands() {
     return islands;
@@ -64,4 +65,6 @@ public class NebrixSkyblock extends JavaPlugin implements com.chunksmith.nebrixS
   public InviteService invites() {
     return invites;
   }
+
+
 }

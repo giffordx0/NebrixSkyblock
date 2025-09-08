@@ -6,6 +6,7 @@ import com.chunksmith.nebrixSkyblock.island.IslandRole;
 import com.chunksmith.nebrixSkyblock.invites.Invite;
 import com.chunksmith.nebrixSkyblock.ui.menus.IslandMainMenu;
 import com.chunksmith.nebrixSkyblock.util.Text;
+
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -14,7 +15,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

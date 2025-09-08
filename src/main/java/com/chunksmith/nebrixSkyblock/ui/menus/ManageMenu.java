@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+/** Admin/manage actions for island owners. */
 public class ManageMenu extends Menu {
   private final NebrixSkyblock plugin;
 

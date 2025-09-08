@@ -2,6 +2,8 @@ package com.chunksmith.nebrixSkyblock.ui.menus;
 
 import com.chunksmith.nebrixSkyblock.NebrixSkyblock;
 import com.chunksmith.nebrixSkyblock.island.Island;
+import com.chunksmith.nebrixSkyblock.island.IslandMember;
+import com.chunksmith.nebrixSkyblock.island.IslandRole;
 import com.chunksmith.nebrixSkyblock.ui.ItemBuilder;
 import com.chunksmith.nebrixSkyblock.ui.Menu;
 import com.chunksmith.nebrixSkyblock.util.Text;
@@ -16,6 +18,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.UUID;
 
+/** Main island menu. */
 public class IslandMainMenu extends Menu {
     private final NebrixSkyblock plugin;
 
@@ -191,6 +194,7 @@ public class IslandMainMenu extends Menu {
                 }
             }
         }
+      }
     }
 
     private int getMaxMembers(Island island) {
