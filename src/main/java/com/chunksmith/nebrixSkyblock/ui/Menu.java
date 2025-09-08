@@ -1,41 +1,30 @@
 package com.chunksmith.nebrixSkyblock.ui;
 
-import org.bukkit.Bukkit;
+import com.chunksmith.nebrixSkyblock.NebrixSkyblock;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
-/** Base class for simple Chest-GUI menus. */
+/** Base class for GUI menus. */
 public abstract class Menu {
-    protected final String title;
-    protected final int size; // multiple of 9
-    protected Inventory inv;
+  protected final NebrixSkyblock plugin;
 
-    protected Menu(String title, int size) {
-        this.title = title;
-        this.size = size;
-    }
+  protected Menu(NebrixSkyblock plugin) {
+    this.plugin = plugin;
+  }
 
-    public void open(Player p) {
-        inv = Bukkit.createInventory(p, size, title);
-        draw(p);
-        p.openInventory(inv);
-        MenuListener.track(p.getUniqueId(), this);
-    }
+  /** Title displayed for this menu. */
+  public abstract Component title();
 
-    public void set(int slot, ItemStack stack) {
-        if (inv != null && slot >= 0 && slot < inv.getSize()) inv.setItem(slot, stack);
-    }
+  /** Build inventory for the given viewer. */
+  public abstract Inventory build(Player viewer);
 
-    /** Fill inventory before opening (or when redrawing). */
-    public abstract void draw(Player viewer);
+  /** Handle a click in this menu. */
+  public void onClick(Player viewer, int slot, InventoryClickEvent event) {}
 
-    /** Handle clicks (override in subclasses). */
-    public void onClick(Player p, int slot, ItemStack clicked, ClickType type) {}
-
-    /** Handle close (override in subclasses). */
-    public void onClose(Player p) {}
-
-    public String title() { return title; }
+  /** Whether clicks should be cancelled automatically. */
+  public boolean cancelClicks() {
+    return true;
+  }
 }

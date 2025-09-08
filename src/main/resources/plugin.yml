@@ -1,5 +1,5 @@
 name: NebrixSkyblock
-version: '0.0.1'
+version: '${version}'
 main: com.chunksmith.nebrixSkyblock.NebrixSkyblock
 api-version: '1.21'
 load: POSTWORLD
@@ -9,8 +9,11 @@ website: https://chunksmith.com
 commands:
   island:
     aliases: [is, skyblock]
-    description: Opens the Skyblock GUI
+    description: Island commands
+    permission: nebrix.island
     usage: /<command>
 permissions:
+  nebrix.island:
+    default: true
   nebrix.admin:
     default: op
