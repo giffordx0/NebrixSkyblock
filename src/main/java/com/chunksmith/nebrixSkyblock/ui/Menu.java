@@ -1,30 +1,36 @@
 package com.chunksmith.nebrixSkyblock.ui;
 
-import com.chunksmith.nebrixSkyblock.NebrixSkyblock;
-import net.kyori.adventure.text.Component;
+import java.util.HashMap;
+import java.util.Map;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-/** Base class for GUI menus. */
+/** Simple menu framework. */
 public abstract class Menu {
-  protected final NebrixSkyblock plugin;
+  private static final Map<Player, Menu> OPEN = new HashMap<>();
 
-  protected Menu(NebrixSkyblock plugin) {
-    this.plugin = plugin;
+  protected abstract Inventory draw(Player viewer);
+
+  protected void click(Player player, InventoryClickEvent event) {}
+
+  public void open(Player player) {
+    Inventory inv = draw(player);
+    OPEN.put(player, this);
+    player.openInventory(inv);
   }
 
-  /** Title displayed for this menu. */
-  public abstract Component title();
-
-  /** Build inventory for the given viewer. */
-  public abstract Inventory build(Player viewer);
-
-  /** Handle a click in this menu. */
-  public void onClick(Player viewer, int slot, InventoryClickEvent event) {}
-
-  /** Whether clicks should be cancelled automatically. */
-  public boolean cancelClicks() {
-    return true;
+  public static class MenuListener implements Listener {
+    @EventHandler
+    public void onClick(InventoryClickEvent event) {
+      if (!(event.getWhoClicked() instanceof Player p)) return;
+      Menu menu = OPEN.get(p);
+      if (menu != null) {
+        menu.click(p, event);
+        event.setCancelled(true);
+      }
+    }
   }
 }

@@ -1,62 +1,106 @@
+
+# NebrixSkyblock Configuration
+
+# World settings
 worlds:
-  overworld: "nebrix_islands_overworld"
-  nether: "nebrix_islands_nether"
-  end: "nebrix_islands_end"
+  overworld: "world"
+  nether: "world_nether"
+  end: "world_the_end"
 
+# Island settings
 islands:
-  spacing: 300
-  base-y: 96
-  radius-default: 100
-  radius-max: 300
-  home-offset: { x: 0.5, y: 0, z: 0.5 }
-  endPortalPick: true   # sneak + left-click with pickaxe to move frame
+  spacing: 300              # Distance between island centers
+  base-y: 96               # Y level for island centers
+  base-radius: 50          # Base protection radius
+  radius-per-level: 10     # Additional radius per upgrade level
+  base-members: 1          # Base number of members allowed
+  members-per-level: 2     # Additional members per upgrade level
 
-limits:
-  by-block:
-    HOPPER: 128
-    TURTLE_EGG: 0
-
-value:
-  by-block:
-    DIAMOND_BLOCK: 100
-    EMERALD_BLOCK: 120
-    ANCIENT_DEBRIS: 250
-
+# Generator settings
 generator:
   cobble:
-    table: { COBBLESTONE: 70, COAL_ORE: 6, IRON_ORE: 5, COPPER_ORE: 5, GOLD_ORE: 3, REDSTONE_ORE: 3, LAPIS_ORE: 3, DIAMOND_ORE: 2, EMERALD_ORE: 1 }
+    table:
+      COBBLESTONE: 1000
+      COAL_ORE: 100
+      IRON_ORE: 50
+      GOLD_ORE: 20
+      REDSTONE_ORE: 30
+      LAPIS_ORE: 15
+      DIAMOND_ORE: 5
+      EMERALD_ORE: 2
+  
   basalt:
-    table: { BASALT: 85, BLACKSTONE: 10, MAGMA_BLOCK: 5 }
-  # optional per-tier multipliers
+    table:
+      BASALT: 1000
+      BLACKSTONE: 200
+      GOLD_ORE: 100
+      NETHER_QUARTZ_ORE: 150
+      NETHER_GOLD_ORE: 80
+      ANCIENT_DEBRIS: 1
+  
+  # Tier multipliers for generator upgrades
   tiers:
-    1: { weight-mult: { DIAMOND_ORE: 1.0, EMERALD_ORE: 1.0 } }
-    2: { weight-mult: { DIAMOND_ORE: 1.2, EMERALD_ORE: 1.2 } }
-    3: { weight-mult: { DIAMOND_ORE: 1.4, EMERALD_ORE: 1.4 } }
+    1:
+      weight-mult:
+        DIAMOND_ORE: 1.0
+        EMERALD_ORE: 1.0
+        ANCIENT_DEBRIS: 1.0
+    2:
+      weight-mult:
+        DIAMOND_ORE: 1.5
+        EMERALD_ORE: 1.3
+        ANCIENT_DEBRIS: 1.2
+    3:
+      weight-mult:
+        DIAMOND_ORE: 2.0
+        EMERALD_ORE: 1.6
+        ANCIENT_DEBRIS: 1.5
 
-upgrades:
-  radius: { 1: 100, 2: 150, 3: 200, 4: 250, 5: 300 }
-  members: { 1: 3, 2: 5, 3: 8 }
-  generator-tier-cost: { crystals: 25, coins: 15000 }
+# Block limits per island
+limits:
+  by-block:
+    BEACON: 1
+    DRAGON_EGG: 1
+    SPAWNER: 10
+    HOPPER: 50
+    CHEST: 100
 
-boosters:
-  # minutes + multipliers
-  value: { duration: 30, mult: 1.25 }
-  drops: { duration: 30, mult: 1.20 }
+# Block values for island worth calculation
+value:
+  by-block:
+    STONE: 1
+    COBBLESTONE: 1
+    DIRT: 1
+    GRASS_BLOCK: 2
+    COAL_ORE: 10
+    IRON_ORE: 25
+    GOLD_ORE: 50
+    DIAMOND_ORE: 100
+    EMERALD_ORE: 150
+    ANCIENT_DEBRIS: 500
+    BEACON: 10000
+    DRAGON_EGG: 50000
 
-missions:
-  # simple numeric knobs; details hard-coded in code
-  xp-per-complete: 25
-  level-unlock:
-    nether: 5
-    end: 12
-
-economy:
-  provider: "vault"
-  crystals-command: "nebrx givecrystals %player% %amount%"
-
+# UI settings
 ui:
-  title-main: "<gradient:#FF5EDF:#00C9FF><bold>NEBRIX SKYBLOCK</bold></gradient>"
-  header: "<gray>✦ </gray><gradient:#FF5EDF:#00C9FF><bold>NEBRIX</bold></gradient><gray> ✦</gray>"
-  line: "<gray>%msg%</gray>"
-  bossbar: "<gradient:#FF5EDF:#00C9FF><bold>NEBRIX</bold></gradient> <gray>•</gray> <white>%context%</white>"
-  actionbar: "<gray>⏳ <white>%seconds%s</white> left</gray>"
+  title-main: "&6&lNebrix Skyblock"
+  title-settings: "&c&lIsland Settings"
+  title-members: "&9&lIsland Members"
+  title-upgrades: "&d&lIsland Upgrades"
+
+# Economy settings (for future bank/shop integration)
+economy:
+  starting-coins: 100
+  starting-crystals: 0
+
+# Protection settings
+protection:
+  prevent-leaf-decay: true
+  prevent-ice-melt: true
+  prevent-fire-spread: true
+  prevent-mob-griefing: true
+
+# Performance settings
+performance:
+  auto-save-interval: 300  # seconds
+  chunk-keep-loaded: true  # Keep island chunks loaded

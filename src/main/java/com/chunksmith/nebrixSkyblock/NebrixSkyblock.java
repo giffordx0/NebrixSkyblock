@@ -5,9 +5,8 @@ import com.chunksmith.nebrixSkyblock.generator.GeneratorService;
 import com.chunksmith.nebrixSkyblock.invites.InviteService;
 import com.chunksmith.nebrixSkyblock.island.IslandService;
 import com.chunksmith.nebrixSkyblock.limits.BlockLimitsService;
-import com.chunksmith.nebrixSkyblock.protect.ProtectionListener;
 import com.chunksmith.nebrixSkyblock.storage.StorageService;
-import com.chunksmith.nebrixSkyblock.ui.MenuManager;
+import com.chunksmith.nebrixSkyblock.ui.Menu;
 import com.chunksmith.nebrixSkyblock.value.ValueService;
 import com.chunksmith.nebrixSkyblock.world.WorldService;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +20,6 @@ public class NebrixSkyblock extends JavaPlugin implements com.chunksmith.nebrixS
   private GeneratorService generators;
   private InviteService invites;
   private StorageService storage;
-  private MenuManager menus;
 
   @Override
   public void onEnable() {
@@ -33,20 +31,17 @@ public class NebrixSkyblock extends JavaPlugin implements com.chunksmith.nebrixS
     this.generators = new GeneratorService(this);
     this.invites = new InviteService();
     this.storage = new StorageService(this);
-    this.menus = new MenuManager();
 
-    IslandCommand cmd = new IslandCommand(this);
-    getCommand("island").setExecutor(cmd);
-    getCommand("island").setTabCompleter(cmd);
-    getServer().getPluginManager().registerEvents(menus, this);
-    getServer().getPluginManager().registerEvents(new ProtectionListener(), this);
+    getCommand("island").setExecutor(new IslandCommand(this));
+    getServer().getPluginManager().registerEvents(new Menu.MenuListener(), this);
   }
 
   public WorldService worlds() {
     return worlds;
   }
 
-  @Override
+
+@Override
   public IslandService islands() {
     return islands;
   }
@@ -71,7 +66,5 @@ public class NebrixSkyblock extends JavaPlugin implements com.chunksmith.nebrixS
     return invites;
   }
 
-  public MenuManager menus() {
-    return menus;
-  }
+
 }

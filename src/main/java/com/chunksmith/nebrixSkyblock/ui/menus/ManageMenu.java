@@ -1,51 +1,23 @@
 package com.chunksmith.nebrixSkyblock.ui.menus;
 
 import com.chunksmith.nebrixSkyblock.NebrixSkyblock;
-import com.chunksmith.nebrixSkyblock.island.Island;
-import com.chunksmith.nebrixSkyblock.ui.ItemBuilder;
 import com.chunksmith.nebrixSkyblock.ui.Menu;
 import com.chunksmith.nebrixSkyblock.util.Text;
-import java.util.List;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 /** Admin/manage actions for island owners. */
 public class ManageMenu extends Menu {
-  private final Island island;
+  private final NebrixSkyblock plugin;
 
-  public ManageMenu(NebrixSkyblock plugin, Island island) {
-    super(plugin);
-    this.island = island;
+  public ManageMenu(NebrixSkyblock plugin) {
+    this.plugin = plugin;
   }
 
   @Override
-  public Component title() {
-    return Text.mini("<yellow>Manage Island</yellow>");
-  }
-
-  @Override
-  public Inventory build(Player viewer) {
-    Inventory inv = Bukkit.createInventory(null, 9, title());
-    inv.setItem(
-        3,
-        new ItemBuilder(Material.TNT)
-            .name("<red>Delete Island</red>")
-            .lore(List.of("<gray>Irreversible</gray>"))
-            .build());
-    inv.setItem(8, new ItemBuilder(Material.ARROW).name("<yellow>Back</yellow>").build());
-    return inv;
-  }
-
-  @Override
-  public void onClick(Player player, int slot, InventoryClickEvent event) {
-    if (slot == 3) {
-      plugin.menus().open(player, new DeleteConfirmMenu(plugin, island));
-    } else if (slot == 8) {
-      plugin.menus().open(player, new IslandMainMenu(plugin));
-    }
+  protected Inventory draw(Player viewer) {
+    return Bukkit.createInventory(
+        null, 9, Text.mini(plugin.getConfig().getString("ui.title-main", "Manage")));
   }
 }
